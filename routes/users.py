@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 
 from models.users import User
 from functions.users import all_users, update_user, create_user
-from schemas.users import UserCreate, UserUpdate
+from routes.auth import current_user
+from schemas.users import UserCreate, UserUpdate, UserCurrent
 
 Base.metadata.create_all(bind=engine)
 
@@ -31,3 +32,8 @@ def get_users(search: str = None, status: bool = True, user_id: int = 0, role: s
 def user_update(form: UserUpdate, db: Session = Depends(database)):
     if update_user(form, db):
         raise HTTPException(status_code=200, detail="Updated successfully!")
+
+
+@router_user.get('/auth_user')
+def read_data(db: Session = Depends(database), user: UserCurrent = Depends(current_user)):
+    return user
