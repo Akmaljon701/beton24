@@ -61,8 +61,8 @@ def create_journey(user, form, db):
 
 
 def last_journey_number(db):
-    last_journey = db.query(Journey).order_by(desc(Journey.id)).first()
-    return str(int(last_journey.number) + 1)
+    last_journey = db.query(Journey).order_by(desc(Journey.id)).first().number
+    return {"number": last_journey}
 
 
 def all_journeys(db):
