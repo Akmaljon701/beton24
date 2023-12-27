@@ -12,16 +12,13 @@ from utils.pagination import is_datetime_valid
 
 
 def create_journey(user, form, db):
-    if not is_datetime_valid(form.datetime):
-        raise HTTPException(status_code=422, detail="Vaqt noto'g'ri kiritildi!")
-
-    car = db.query(Cars).filter_by(name=form.mashina_marka, nomer=form.mashina_nomer).first()
+    car = db.query(Cars).filter_by(name=form.mashina_marka, number=form.mashina_nomer).first()
     if car: driver_id = car.driver_id
     else: driver_id = 0
 
     buyurtma = db.query(Order).filter_by(id=form.buyurtma_id).first()
     if buyurtma:
-        if buyurtma.top_value < form.value:
+        if buyurtma.top_value <= form.value:
             buyurtma.top_value -= form.value
             buyurtma.topshirildi_value += form.value
             buyurtma.narx = form.narx
