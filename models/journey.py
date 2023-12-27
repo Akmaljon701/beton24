@@ -11,7 +11,6 @@ class Journey(Base):
     user_id = Column(Integer)
     datetime = Column(String(55))
     date = Column(String(55))
-    status = Column(String(55))
     fare = Column(Float)
     address = Column(String(255))
     top_date = Column(String(50))

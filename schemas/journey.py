@@ -12,5 +12,4 @@ class JourneyCreate(BaseModel):
     narx: float
     number: str
     seh_id: int
-    costumer_id: int
     buyurtma_id: int
