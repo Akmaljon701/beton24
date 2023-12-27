@@ -3,14 +3,20 @@ import pytz
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 
+from models.cars import Cars
 from models.journey import Journey, Topshiruv
 from fastapi.exceptions import HTTPException
+
+from models.orders import Order
 from utils.pagination import is_datetime_valid
 
 
 def create_journey(user, form, db):
     if not is_datetime_valid(form.datetime):
         raise HTTPException(status_code=422, detail="Vaqt noto'g'ri kiritildi!")
+    car = db.query(Cars).filter_by(name=form.mashina_marka, nomer=form.mashina_nomer).first()
+    if not car:
+        raise HTTPException(status_code=404, detail="Bunday mashina mavjud emas!")
     post_journey = Journey(
         # qaysini qo'shish kerak
         fare=0.1,
@@ -23,8 +29,8 @@ def create_journey(user, form, db):
         # podozreniya
         fare_fixed=0,
         costumer_id=form.costumer_id,
-        driver_id=form.driver_id,
 
+        driver_id=car.driver_id,
         datetime=form.datetime,
         yol_kira=form.yol_kira,
         mashina_nomer=form.mashina_nomer,
@@ -32,14 +38,13 @@ def create_journey(user, form, db):
         number=form.number,
         user_id=user.id,
         status="True",
-        date=datetime.now(pytz.timezone('Asia/Tashkent')),
+        date=form.datetime,
     )
     db.add(post_journey)
     db.flush()
 
     post_topshiruv = Topshiruv(
         # qaysini qo'shish kerak
-        buyurtma_id=1,
         tannarx=1,
         type="",
         mah_id=1,
@@ -47,17 +52,29 @@ def create_journey(user, form, db):
         filial_id=1,
         qorovul_id=1,
 
+        buyurtma_id=form.buyurtma_id,
         journey_id=post_journey.id,
         value=form.value,
         narx=form.narx,
         seh_id=form.seh_id,
         user_id=user.id,
-        date=datetime.now(pytz.timezone('Asia/Tashkent')),
+        date=form.datetime,
     )
+
+    buyurtma = db.query(Order).filter_by(id=form.buyurtma_id).first()
+    if buyurtma:
+        if buyurtma.top_value < form.value:
+            buyurtma.top_value -= form.value
+            buyurtma.topshirildi_value += form.value
+            db.commit()
+        else: raise HTTPException(status_code=400, detail="Topshirish soni buyurtma sonidan ko'p!")
+    else:
+        raise HTTPException(status_code=404, detail="Buyurtma topilmadi!")
+
     db.add(post_topshiruv)
     db.flush()
     db.commit()
-    raise HTTPException(status_code=201, detail="Created!")
+    raise HTTPException(status_code=201, detail="Qo'shildi!!")
 
 
 def last_journey_number(db):

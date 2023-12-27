@@ -17,7 +17,7 @@ async def create_journey_data(form: JourneyCreate, db: Session = Depends(databas
     return create_journey(user, form, db)
 
 
-@router_journey.get('last_journey_number')
+@router_journey.get('/last_journey_number')
 async def read_data(db: Session = Depends(database)):
     return last_journey_number(db)
 
