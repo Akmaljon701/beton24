@@ -13,6 +13,7 @@ class UserBase(BaseModel):
 
 
 class UserCreate(BaseModel):
+    fullname: str
     username: str
     password_hash: str
     role: str
@@ -21,6 +22,7 @@ class UserCreate(BaseModel):
 
 class UserUpdate(BaseModel):
     user_id: int
+    fullname: str
     username: str
     password_hash: str
     role: str

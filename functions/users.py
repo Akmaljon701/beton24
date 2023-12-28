@@ -24,6 +24,7 @@ def create_user(form, db):
     if check_user:
         raise HTTPException(status_code=403, detail="User already exists!")
     new_user = User(
+        fullname=form.fullname,
         username=form.username,
         password_hash=hash_password(form.password_hash),
         role=form.role,
@@ -42,6 +43,7 @@ def update_user(form, db):
         raise HTTPException(status_code=404, detail="User not found!")
 
     user.update({
+        User.fullname: form.fullname,
         User.username: form.username,
         User.password_hash: hash_password(form.password_hash),
         User.role: form.role,
