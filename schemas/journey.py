@@ -13,3 +13,4 @@ class JourneyCreate(BaseModel):
     number: str
     seh_id: int
     buyurtma_id: int
+    shartnoma_id: int

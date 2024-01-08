@@ -13,7 +13,7 @@ class Product(Base):
     vitrina_narx = Column(Integer)
     tp_id = Column(Integer)
     image = Column(Text)
-    date = Column(String)
+    date = Column(String(50))
     filial_id = Column(Integer)
     bil_value = Column(Float)
     brak_value = Column(Float)

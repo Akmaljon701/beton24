@@ -39,6 +39,7 @@ def create_journey(user, form, db):
         mashina_nomer=form.mashina_nomer,
         mashina_marka=form.mashina_marka,
         number=form.number,
+        order_id=form.shartnoma_id,
         user_id=user.id,
         date=form.datetime,
         address=buyurtma.address,

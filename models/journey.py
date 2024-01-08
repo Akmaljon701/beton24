@@ -23,6 +23,7 @@ class Journey(Base):
     antifreeze_percent = Column(Integer)
     disabled = Column(Integer)
     filial_id = Column(Integer)
+    order_id = Column(Integer, ForeignKey('orders.id'))
 
     topshiruvlar = relationship('Topshiruv', back_populates='journey')
 

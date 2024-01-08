@@ -14,5 +14,5 @@ router_costumer = APIRouter()
 async def costumers_data(db: Session = Depends(database),
                          user: UserCurrent = Depends(current_user)):
     check_ishchi_admin(user)
-    return all_customers_with_orders(db)
+    return all_customers_with_orders(user=user, db=db)
 

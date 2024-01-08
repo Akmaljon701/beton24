@@ -11,4 +11,5 @@ class User(Base):
     password_hash = Column(String(200))
     role = Column(String(50))
     status = Column(Boolean, default=True)
+    filial_id = Column(Integer)
     access_token = Column(String(400), default='')
